@@ -51,105 +51,49 @@ https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
 
 ## Steps
 
-1. [Download OpenWhisk-Kubernetes codebase](#1-create-a-cassandra-headless-service)
-1. [Create OpenWhisk namespace](#1-create-a-cassandra-headless-service)
-2. [Build or use OpenWhisk Docker Images](#2-create-a-replication-controller)
-3. [Create Kubernetes yaml files](#3-validate-the-replication-controller)
-4. [Deplpy OpenWhisk on Kubernetes](#4-scale-the-replication-controller)
+1. [Download OpenWhisk-Kubernetes codebase](#1-download-openWhisk-kubernetes-codebase)
+
+### Quick Start
+
+2. [Create OpenWhisk namespace](#2-create-openWhisk-namespace)
+3. [Run Kubernetes Job to deploy OpenWhisk](#run-kubernetes-job-to-deploy-openwhisk)
+
+### Manually deploying
+3. [Build or use OpenWhisk Docker Images](#2-create-a-replication-controller)
+4. [Create Kubernetes yaml files](#3-validate-the-replication-controller)
+5. [Deplpy OpenWhisk on Kubernetes](#4-scale-the-replication-controller)
 
 #### [Troubleshooting](#troubleshooting-1)
 
 
-# 1. Create a Cassandra Headless Service
-In this sample app you don’t need load-balancing and a single service IP. In this case, you can create “headless” service by specifying **none** for the  **clusterIP**. We'll need the headless service for the Pods to discover the IP address of the Cassandra seed.
-Here is the Service description for the headless Service:
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: cassandra
-  name: cassandra
-spec:
-  clusterIP: None
-  ports:
-    - port: 9042
-  selector:
-    app: cassandra
+# 1. Download OpenWhisk Kubernetes Codebase
+Download the code needed to build and deploy OpenWhisk on Kubernetes
+
 ```
-You can create the headless service using the provided yaml file:
-```bash
-$ kubectl create -f cassandra-service.yaml
-service "cassandra" created
+git clone https://github.com/openwhisk/openwhisk-devtools.git
 ```
 
-If you want to create a persistent Cassandra cluster using StatefulSets, please jump to [Step 6](#6-create-local-volumes)
+# 2. Create OpenWhisk namespace
 
-# 2. Create a Replication Controller
-The Replication Controller is the one responsible for creating or deleting pods to ensure the number of Pods match its defined number in "replicas". The Pods' template are defined inside the Replication Controller. You can set how much resources will be used for each pod inside the template and limit the resources they can use. Here is the Replication Controller description:
-```yaml
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: cassandra
-  # The labels will be applied automatically
-  # from the labels in the pod template, if not set
-  # labels:
-    # app: cassandra
-spec:
-  replicas: 1
-  # The selector will be applied automatically
-  # from the labels in the pod template, if not set.
-  # selector:
-      # app: cassandra
-  template:
-    metadata:
-      labels:
-        app: cassandra
-    spec:
-      containers:
-        - env:
-            - name: CASSANDRA_SEED_DISCOVERY
-              value: cassandra
-            # CASSANDRA_SEED_DISCOVERY should match the name of the service in cassandra-service.yaml
+Once you are successfully targeted, you will need to create a create a namespace called openwhisk. To do this, you can just run the following command.
 
-            - name: MAX_HEAP_SIZE
-              value: 512M
-            - name: HEAP_NEWSIZE
-              value: 100M
-            - name: CASSANDRA_CLUSTER_NAME
-              value: Cassandra
-            - name: CASSANDRA_DC
-              value: DC1
-            - name: CASSANDRA_RACK
-              value: Rack1
-            - name: CASSANDRA_ENDPOINT_SNITCH
-              value: GossipingPropertyFileSnitch
-          image: docker.io/anthonyamanse/cassandra-demo:7.0
-          name: cassandra
-          ports:
-            - containerPort: 7000
-              name: intra-node
-            - containerPort: 7001
-              name: tls-intra-node
-            - containerPort: 7199
-              name: jmx
-            - containerPort: 9042
-              name: cql
-          volumeMounts:
-            - mountPath: /var/lib/cassandra/data
-              name: data
-      volumes:
-        - name: data
-          emptyDir: {}
 ```
- You can create a Replication Controller using the provided yaml file with 1 replica:
-```bash
-$ kubectl create -f cassandra-controller.yaml
-replicationcontroller "cassandra" created
+kubectl apply -f configure/openwhisk_kube_namespace.yml
+
 ```
 
-# 3. Validate the Replication Controller
+# 3. Run Kubernetes Job to deploy OpenWhisk
+
+Run the Kubernetes job to setup the OpenWhisk environment.
+
+```
+kubectl apply -f configure/configure_whisk.yml
+
+```
+
+### SECTION BELOW NEEDS WORK
+
+# 4. Validate the Replication Controller
 You can view a list of Replication Controllers using this command:
 ```bash
 $ kubectl get rc
