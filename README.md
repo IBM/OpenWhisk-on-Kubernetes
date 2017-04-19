@@ -66,7 +66,7 @@ https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
 #### [Troubleshooting](#troubleshooting-1)
 
 
-# 1. Download OpenWhisk Kubernetes Codebase
+# 1. Download OpenWhisk Kubernetes codebase
 Download the code needed to build and deploy OpenWhisk on Kubernetes
 
 ```
