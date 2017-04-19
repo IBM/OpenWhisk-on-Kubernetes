@@ -7,7 +7,7 @@ This project demonstrates the deployment of a multi-node scalable Cassandra clus
 
 With IBM Bluemix Container Service, you can deploy and manage your own Kubernetes cluster in the cloud that lets you automate the deployment, operation, scaling, and monitoring of containerized apps over a cluster of independent compute hosts called worker nodes.  We can then leverage Bluemix Container Service using Kubernetes to deploy scalable OpenWhisk.
 
-![kube-openwhisk](images/kube-cassandra.png)
+![kube-openwhisk](images/kube-openwhisk.png)
 
 ## Included Components
 - [Bluemix container service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
@@ -44,6 +44,10 @@ The OpenWhisk will not be exposed on the public IP of the Kubernetes cluster. Yo
 - Kubernetes needs to be version 1.5+
 - Kubernetes has Kube-DNS deployed
 - (Optional) Kubernetes Pods can receive public addresses. This will be required if you wish to reach Nginx from outside of the Kubernetes cluster's network.
+
+```Note: Use the following link to complete the instructions at the bottom
+https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
+```
 
 ## Steps
 
