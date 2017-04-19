@@ -1,25 +1,25 @@
 
 [![Build Status](https://travis-ci.org/IBM/kubernetes-container-service-cassandra-deployment.svg?branch=master)](https://travis-ci.org/IBM/kubernetes-container-service-cassandra-deployment)
 
-# Scalable multi-node Cassandra cluster on Bluemix Container Service using Kubernetes
+# Scalable OpenWhisk on Bluemix Container Service using Kubernetes
 
-This project demonstrates the deployment of a multi-node scalable Cassandra cluster on Kubernetes. Apache Cassandra is a massively scalable open source NoSQL database. Cassandra is perfect for managing large amounts of structured, semi-structured, and unstructured data across multiple datacenters and the cloud. 
+This project demonstrates the deployment of a multi-node scalable Cassandra cluster on Bluemix Container Service using Kubernetes. Apache OpenWhisk is a serverless, open source cloud platform that executes functions in response to events at any scale. As a developer there's no need to manage the servers that run your code. Apache OpenWhisk operates and scales your application for you. 
 
-With IBM Bluemix Container Service, you can deploy and manage your own Kubernetes cluster in the cloud that lets you automate the deployment, operation, scaling, and monitoring of containerized apps over a cluster of independent compute hosts called worker nodes.  We can then leverage Bluemix Container Service using Kubernetes to deploy scalable Cassandra cluster.
+With IBM Bluemix Container Service, you can deploy and manage your own Kubernetes cluster in the cloud that lets you automate the deployment, operation, scaling, and monitoring of containerized apps over a cluster of independent compute hosts called worker nodes.  We can then leverage Bluemix Container Service using Kubernetes to deploy scalable OpenWhisk.
 
-![kube-cassandra](images/kube-cassandra.png)
+![kube-openwhisk](images/kube-cassandra.png)
 
 ## Included Components
 - [Bluemix container service](https://console.ng.bluemix.net/catalog/?taxonomyNavigation=apps&category=containers)
 - [Kubernetes Clusters](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov)
 - [Bluemix DevOps Toolchain Service](https://console.ng.bluemix.net/catalog/services/continuous-delivery)
-- [Cassandra](http://cassandra.apache.org/)
+- [OpenWhisk](http://openwhisk.org/)
 
 ## Kubernetes Concepts Used
 
 - [Kubenetes Pods](https://kubernetes.io/docs/user-guide/pods)
 - [Kubenetes Services](https://kubernetes.io/docs/user-guide/services)
-- [Kubernetes Replication Controller](https://kubernetes.io/docs/user-guide/replication-controller/)
+- [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)
 - [Kubernets StatefulSets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
 
 ## Prerequisite
@@ -37,28 +37,21 @@ If you want to deploy Cassandra nodes directly to Bluemix, click on 'Deploy to B
 
 Please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions.md) to complete your toolchain and pipeline.
 
-The Cassandra cluster will not be exposed on the public IP of the Kubernetes cluster. You can still access them by exporting your Kubernetes cluster configuration using `bx cs cluster-config <your-cluster-name>` and doing [Step 5](#5-using-cql) or to simply check their status `kubectl exec <POD-NAME> -- nodetool status`
+The OpenWhisk will not be exposed on the public IP of the Kubernetes cluster. You can still access them by exporting your Kubernetes cluster configuration using `bx cs cluster-config <your-cluster-name>` and doing [Step 5](#5-using-cql) or to simply check their status `kubectl exec <POD-NAME> -- nodetool status`
+
+## Prerquisites
+
+- Kubernetes needs to be version 1.5+
+- Kubernetes has Kube-DNS deployed
+- (Optional) Kubernetes Pods can receive public addresses. This will be required if you wish to reach Nginx from outside of the Kubernetes cluster's network.
 
 ## Steps
 
-### Create a Cassandra Service for Cassandra cluster formation and discovery
-
-1. [Create a Cassandra Headless Service](#1-create-a-cassandra-headless-service)
-
-### Use Replication Controller to create non-persistent Cassandra cluster
-
-2. [Create a Replication Controller](#2-create-a-replication-controller)
-3. [Validate the Replication Controller](#3-validate-the-replication-controller)
-4. [Scale the Replication Controller](#4-scale-the-replication-controller)
-5. [Using Cassandra Query Language (CQL)](#5-using-cql)
-
-### Use StatefulSets to create persistent Cassandra cluster
-
-6. [Create Local Volumes](#6-create-local-volumes)
-7. [Create a StatefulSet](#7-create-a-statefulset)
-8. [Validate the StatefulSet](#8-validate-the-statefulset)
-9. [Scale the StatefulSet](#9-scale-the-statefulset)
-10. [Using Cassandra Query Language(CQL)](#10-using-cql)
+1. [Download OpenWhisk-Kubernetes codebase](#1-create-a-cassandra-headless-service)
+1. [Create OpenWhisk namespace](#1-create-a-cassandra-headless-service)
+2. [Build or use OpenWhisk Docker Images](#2-create-a-replication-controller)
+3. [Create Kubernetes yaml files](#3-validate-the-replication-controller)
+4. [Deplpy OpenWhisk on Kubernetes](#4-scale-the-replication-controller)
 
 #### [Troubleshooting](#troubleshooting-1)
 
