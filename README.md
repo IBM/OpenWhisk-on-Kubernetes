@@ -78,6 +78,7 @@ git clone https://github.com/openwhisk/openwhisk-devtools.git
 Once you are successfully targeted, you will need to create a create a namespace called openwhisk. To do this, you can just run the following command.
 
 ```
+cd openwhisk-devtools
 kubectl apply -f configure/openwhisk_kube_namespace.yml
 
 ```
@@ -90,6 +91,32 @@ Run the Kubernetes job to setup the OpenWhisk environment.
 kubectl apply -f configure/configure_whisk.yml
 
 ```
+The Kubernetes job under the covers pulls the latest docker image needed as a base, and then runs the configuration script
+
+```
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: configure-openwhisk
+  namespace: openwhisk
+  labels:
+    name: configure-openwhisk
+spec:
+  completions: 1
+  template:
+    metadata:
+      labels:
+        name: config
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: configure-openwhisk
+        image: danlavine/whisk_config:latest
+        imagePullPolicy: Always
+        command: [ "/openwhisk-devtools/kubernetes/configure/configure.sh" ]
+
+```
+
 
 ### SECTION BELOW NEEDS WORK
 
