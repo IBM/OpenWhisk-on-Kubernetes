@@ -56,12 +56,12 @@ https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
 ### Quick Start
 
 2. [Create OpenWhisk namespace](#2-create-openWhisk-namespace)
-3. [Run Kubernetes Job to deploy OpenWhisk](#run-kubernetes-job-to-deploy-openwhisk)
+3. [Run Kubernetes Job to deploy OpenWhisk](#3-run-kubernetes-job-to-deploy-openwhisk)
 
 ### Manually deploying
-4. [Build or use OpenWhisk Docker Images](#2-create-a-replication-controller)
-5. [Create Kubernetes yaml files](#3-validate-the-replication-controller)
-6. [Deplpy OpenWhisk on Kubernetes](#4-scale-the-replication-controller)
+4. [Build or use OpenWhisk Docker Images](#4-create-a-replication-controller)
+5. [Create Kubernetes yaml files](#5-validate-the-replication-controller)
+6. [Deplpy OpenWhisk on Kubernetes](#6-scale-the-replication-controller)
 
 #### [Troubleshooting](#troubleshooting-1)
 
