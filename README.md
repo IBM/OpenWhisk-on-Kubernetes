@@ -31,7 +31,7 @@ If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix,  clic
 
 > You will need to create your Kubernetes cluster first and make sure it is fully deployed in your Bluemix account.
 
-[![Create Toolchain](https://bluemix.net/deploy/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/?repository=https://github.com/IBM/kubernetes-container-service-cassandra-deployment)
+[![Create Toolchain](https://github.com/IBM/container-journey-template/blob/master/images/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)
 
 Please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions.md) to complete your toolchain and pipeline.
 
@@ -126,16 +126,12 @@ kubectl -n openwhisk get pods #This will retrieve which pod is running the confi
 kubectl -n openwhisk logs configure-openwhisk-XXXXX
 ```
 
-# 4. Setup Secret for OpenWhisk Authorization Token
-
 As part of the deployment process, we store the OpenWhisk Authorization tokens in Kubernetes secrets. To use the secrets you will need to base64 decode them. So, run the following commands to retrieve your secret and decode it with base64.
 
 ```
 kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml
 export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
 ```
-
-# 5. Setup OpenWhisk
 
 Obtain the IP address of the Kubernetes nodes.
 
