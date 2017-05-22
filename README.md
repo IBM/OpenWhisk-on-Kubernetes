@@ -83,41 +83,78 @@ kubectl apply -f configure/openwhisk_kube_namespace.yml
 
 # 3. Run Kubernetes Job to deploy OpenWhisk
 
-Run the Kubernetes job to setup the OpenWhisk environment.
+First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code.
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1alpha1
+kind: ClusterRoleBinding
+metadata:
+  name: openwhisk:admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: openwhisk
+```
+
+Then, run the ClusterRoleBinding on your Kubernetes.
+
+```
+kubectl create -f permission.yaml
+```
+
+Next, modify the command in `configure/configure_whisk.yml` to the newest configuration script.
+
+```
+        command: [ "/incubator-openwhisk-deploy-kube/configure/configure.sh" ]
+```
+
+Now, run the Kubernetes job to setup the OpenWhisk environment.
 
 ```
 kubectl apply -f configure/configure_whisk.yml
-
 ```
 The Kubernetes job under the covers pulls the latest docker image needed as a base, and then runs the configuration script
 
-```
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: configure-openwhisk
-  namespace: openwhisk
-  labels:
-    name: configure-openwhisk
-spec:
-  completions: 1
-  template:
-    metadata:
-      labels:
-        name: config
-    spec:
-      restartPolicy: Never
-      containers:
-      - name: configure-openwhisk
-        image: danlavine/whisk_config:latest
-        imagePullPolicy: Always
-        command: [ "/openwhisk-devtools/kubernetes/configure/configure.sh" ]
+To see what is happening during the deployment process, you should be able to see the logs by running
 
 ```
+kubectl -n openwhisk get pods #This will retrieve which pod is running the configure-openwhisk
+kubectl -n openwhisk logs configure-openwhisk-XXXXX
+```
 
+# 4. Setup Secret for OpenWhisk Authorization Token
 
-### SECTION BELOW NEEDS WORK
+As part of the deployment process, we store the OpenWhisk Authorization tokens in Kubernetes secrets. To use the secrets you will need to base64 decode them. So, run the following commands to retrieve your secret and decode it with base64.
 
+```
+kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml
+export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
+```
+
+# 5. Setup OpenWhisk
+
+Obtain the IP address of the Kubernetes nodes.
+
+```
+kubectl get nodes
+```
+
+Obtain the public port for the Kubernetes Nginx Service and note the port that used for the api endpoint
+
+```
+kubectl -n openwhisk describe service nginx
+export WSK_PORT=$(kubectl -n openwhisk describe service nginx | grep https-api | grep NodePort| awk '{print $3}' | cut -d'/' -f1)
+```
+Now you should be able to setup the wsk cli like normal and interact with Openwhisk.
+
+```
+wsk property set --auth $AUTH_SECRET --apihost https://[kube_node_ip]:$WSK_PORT
+```
+> Note: Since your Kubernetes doesn't contain any IP SANs, you need to run your OpenWhisk actions with the insecure `-i` flag.
 
 ## Troubleshooting
 
