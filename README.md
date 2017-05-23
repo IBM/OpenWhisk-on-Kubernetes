@@ -106,10 +106,13 @@ Then, run the ClusterRoleBinding on your Kubernetes.
 kubectl create -f permission.yaml
 ```
 
-Next, modify the command in `configure/configure_whisk.yml` to the newest configuration script.
+Next, Since the offical image has a different path for configuration script, run the following command to modify the command section in `configure/configure_whisk.yml` to the correct path.
 
 ```
-        command: [ "/incubator-openwhisk-deploy-kube/configure/configure.sh" ]
+#For OSX
+sed -i '' s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
+#For Linux
+sed -i s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
 ```
 
 Now, run the Kubernetes job to setup the OpenWhisk environment.
@@ -133,7 +136,7 @@ kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml
 export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
 ```
 
-Obtain the IP address of the Kubernetes nodes.
+Obtain the IP address of the Kubernetes nodes. You will need this to setup your OpenWhisk API host.
 
 ```
 kubectl get nodes
@@ -149,8 +152,11 @@ Now you should be able to setup the wsk cli like normal and interact with Openwh
 
 ```
 wsk property set --auth $AUTH_SECRET --apihost https://[kube_node_ip]:$WSK_PORT
+wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result 
 ```
 > Note: Since your Kubernetes doesn't contain any IP SANs, you need to run your OpenWhisk actions with the insecure `-i` flag.
+
+# 4. Build or use OpenWhisk Docker Images
 
 ## Troubleshooting
 
