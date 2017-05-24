@@ -52,7 +52,7 @@ function initial_setup() {
 
   kubectl get -n openwhisk jobs
   kuber=$(kubectl get -n openwhisk jobs | grep configure | awk '{print $3}')
-  while [ $kuber -eq 0 ]
+  while [[ $kuber -eq 0 ]] || [[ -z $kuber ]]
   do
     echo "Configuring openwhisk.."
     sleep 15s
