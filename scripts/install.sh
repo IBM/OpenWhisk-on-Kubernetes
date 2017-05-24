@@ -39,6 +39,8 @@ function cluster_setup() {
     kubectl get ns
     kuber=$(kubectl get ns | grep openwhisk)
   done
+  
+  echo "Cluster is clean"
 }
 
 function initial_setup() {
