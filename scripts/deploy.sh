@@ -21,9 +21,11 @@ kubectl delete --ignore-not-found=true namespace openwhisk
 
 kubectl create -f permission.yaml
 
-git clone https://github.com/openwhisk/openwhisk-devtools.git
-cd openwhisk-devtools/kubernetes
+#Clone the repo
+git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
+cd incubator-openwhisk-deploy-kube
 
+#Create namespace and config script
 kubectl apply -f configure/openwhisk_kube_namespace.yml
 sed -i s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
 kubectl apply -f configure/configure_whisk.yml
@@ -36,6 +38,7 @@ while [ ${#kuber} -ne 0 ]; do
 	whisk=$(kubectl -n openwhisk get pods | grep "configure-openwhisk")
 done
 
+#Get credentials from our kubernetes openwhisk.
 kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml
 export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
 export WSK_PORT=$(kubectl -n openwhisk describe service nginx | grep https-api | grep NodePort| awk '{print $3}' | cut -d'/' -f1)

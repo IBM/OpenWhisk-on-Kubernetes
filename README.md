@@ -84,7 +84,7 @@ kubectl apply -f configure/openwhisk_kube_namespace.yml
 
 >**Important**: Since the Kubernetes Job needs cluster-admin role to create and deploy all the necessary components for OpenWhish, please run `kubectl get ClusterRole` and make sure you have **cluster-admin** role in order to proceed to the following steps. If you do not have a cluster-admin role, please switch to a cluster that has cluster-admin role.
 
-First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code.
+First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/openwhisk-on-k8.git`).
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1alpha1
@@ -234,7 +234,7 @@ kubectl delete pods,deployments,configmaps,statefulsets,services,jobs --all --na
 kubectl delete namespace openwhisk
 ```
 
-If your job doesn't have permission to create new deployments/services, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. Therefore, create a `permission.yaml` file with the following code.
+If your job doesn't have permission to create new deployments/services, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. Therefore, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/openwhisk-on-k8.git`).
 
   >**Important**: Since the Kubernetes Job needs cluster-admin role to create and deploy all the necessary components for OpenWhish, please run `kubectl get ClusterRole` and make sure you have **cluster-admin** role in order to proceed to the following steps. If you do not have a cluster-admin role, please switch to a cluster that has cluster-admin role.
 
