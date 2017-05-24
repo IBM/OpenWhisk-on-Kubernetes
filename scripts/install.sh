@@ -24,8 +24,8 @@ function bluemix_auth() {
 
 function cluster_setup() {
   #change cluster-travis to cluster name
-  bx cs workers cluster-travis
-  $(bx cs cluster-config cluster-travis | grep export)
+  bx cs workers $CLUSTER
+  $(bx cs cluster-config $CLUSTER | grep export)
   echo "Cloning OpenWhisk Repository"
   git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
   cd incubator-openwhisk-deploy-kube
@@ -36,9 +36,11 @@ function cluster_setup() {
   while [ ${#kuber} -ne 0 ]
   do
     sleep 30s
-    kubectl kubectl get ns
+    kubectl get ns
     kuber=$(kubectl get ns | grep openwhisk)
   done
+  
+  echo "Cluster is clean"
 }
 
 function initial_setup() {
@@ -52,7 +54,7 @@ function initial_setup() {
 
   kubectl get -n openwhisk jobs
   kuber=$(kubectl get -n openwhisk jobs | grep configure | awk '{print $3}')
-  while [ $kuber -eq 0 ]
+  while [[ $kuber -eq 0 ]] || [[ -z $kuber ]]
   do
     echo "Configuring openwhisk.."
     sleep 15s
