@@ -68,7 +68,7 @@ https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
 Download the code needed to build and deploy OpenWhisk on Kubernetes
 
 ```
-git clone https://github.com/openwhisk/openwhisk-devtools.git
+git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
 cd openwhisk-devtools/kubernetes
 ```
 
@@ -105,15 +105,6 @@ Then, run the ClusterRoleBinding on your Kubernetes.
 
 ```
 kubectl create -f permission.yaml
-```
-
-Next, Since the offical image has a different path for configuration script, run the following command to modify the command section in `configure/configure_whisk.yml` to the correct path.
-
-```
-#For OSX
-sed -i '' s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
-#For Linux
-sed -i s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
 ```
 
 Now, run the Kubernetes job to setup the OpenWhisk environment.
