@@ -29,9 +29,9 @@ sed -i s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configur
 kubectl apply -f configure/configure_whisk.yml
 
 echo "Wait until configure_whisk is finish, usually takes 15 minutes."
-
 whisk=$(kubectl -n openwhisk get pods | grep "configure-openwhisk")
 while [ ${#kuber} -ne 0 ]; do
+	echo "Wait until configure_whisk is finish"
 	sleep 120s
 	whisk=$(kubectl -n openwhisk get pods | grep "configure-openwhisk")
 done
