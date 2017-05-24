@@ -45,6 +45,8 @@ function initial_setup() {
 
   echo "Creating openwhisk namespace..."
   kubectl apply -f configure/openwhisk_kube_namespace.yml
+  echo "Creating ClusterRoleBinding..."
+  kubectl apply -f ../permission.yaml
   echo "Creating openwhisk job"
   kubectl apply -f configure/configure_whisk.yml
 
