@@ -28,8 +28,13 @@ kubectl apply -f configure/openwhisk_kube_namespace.yml
 sed -i s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
 kubectl apply -f configure/configure_whisk.yml
 
-#sleep until configure_whisk is finish.
-sleep 5m
+echo "Wait until configure_whisk is finish, usually takes 15 minutes."
+
+whisk=$(kubectl -n openwhisk get pods | grep "configure-openwhisk")
+while [ ${#kuber} -ne 0 ]; do
+	sleep 120s
+	whisk=$(kubectl -n openwhisk get pods | grep "configure-openwhisk")
+done
 
 kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml
 export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
