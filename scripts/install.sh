@@ -36,7 +36,7 @@ function cluster_setup() {
   while [ ${#kuber} -ne 0 ]
   do
     sleep 30s
-    kubectl kubectl get ns
+    kubectl get ns
     kuber=$(kubectl get ns | grep openwhisk)
   done
 }
