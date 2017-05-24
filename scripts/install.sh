@@ -24,8 +24,8 @@ function bluemix_auth() {
 
 function cluster_setup() {
   #change cluster-travis to cluster name
-  bx cs workers cluster-travis
-  $(bx cs cluster-config cluster-travis | grep export)
+  bx cs workers $CLUSTER
+  $(bx cs cluster-config $CLUSTER | grep export)
   echo "Cloning OpenWhisk Repository"
   git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
   cd incubator-openwhisk-deploy-kube
