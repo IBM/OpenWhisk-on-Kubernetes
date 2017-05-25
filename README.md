@@ -27,13 +27,12 @@ With IBM Bluemix Container Service, you can deploy and manage your own Kubernete
 Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Deploy to Bluemix
-If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix,  click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and pipeline for deploying the WordPress sample, else jump to [Steps](#steps)
+If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix, click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and fill in all the environment variables on **Delivery Pipeline**. For Further instructions, please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions_new.md).
 
 > You will need to create your Kubernetes cluster first and make sure it is fully deployed in your Bluemix account.
 
 [![Create Toolchain](https://github.com/IBM/container-journey-template/blob/master/images/button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)
 
-Please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions.md) to complete your toolchain and pipeline.
 
 The OpenWhisk will not be exposed on the public IP of the Kubernetes cluster. You can still access them by exporting your Kubernetes cluster configuration using `bx cs cluster-config <your-cluster-name>` and doing [Step 5](#5-using-cql) or to simply check their status `kubectl exec <POD-NAME> -- nodetool status`
 
@@ -68,8 +67,8 @@ https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
 Download the code needed to build and deploy OpenWhisk on Kubernetes
 
 ```
-git clone https://github.com/openwhisk/openwhisk-devtools.git
-cd openwhisk-devtools/kubernetes
+git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
+cd incubator-openwhisk-deploy-kube
 ```
 
 # 2. Create OpenWhisk namespace
@@ -84,7 +83,7 @@ kubectl apply -f configure/openwhisk_kube_namespace.yml
 
 >**Important**: Since the Kubernetes Job needs cluster-admin role to create and deploy all the necessary components for OpenWhish, please run `kubectl get ClusterRole` and make sure you have **cluster-admin** role in order to proceed to the following steps. If you do not have a cluster-admin role, please switch to a cluster that has cluster-admin role.
 
-First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code.
+First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/openwhisk-on-k8.git`).
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1alpha1
@@ -105,15 +104,6 @@ Then, run the ClusterRoleBinding on your Kubernetes.
 
 ```
 kubectl create -f permission.yaml
-```
-
-Next, Since the offical image has a different path for configuration script, run the following command to modify the command section in `configure/configure_whisk.yml` to the correct path.
-
-```
-#For OSX
-sed -i '' s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
-#For Linux
-sed -i s#openwhisk-devtools/kubernetes#incubator-openwhisk-deploy-kube# configure/configure_whisk.yml
 ```
 
 Now, run the Kubernetes job to setup the OpenWhisk environment.
@@ -234,7 +224,7 @@ kubectl delete pods,deployments,configmaps,statefulsets,services,jobs --all --na
 kubectl delete namespace openwhisk
 ```
 
-If your job doesn't have permission to create new deployments/services, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. Therefore, create a `permission.yaml` file with the following code.
+If your job doesn't have permission to create new deployments/services, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. Therefore, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/openwhisk-on-k8.git`).
 
   >**Important**: Since the Kubernetes Job needs cluster-admin role to create and deploy all the necessary components for OpenWhish, please run `kubectl get ClusterRole` and make sure you have **cluster-admin** role in order to proceed to the following steps. If you do not have a cluster-admin role, please switch to a cluster that has cluster-admin role.
 
