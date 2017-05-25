@@ -27,7 +27,7 @@ With IBM Bluemix Container Service, you can deploy and manage your own Kubernete
 Create a Kubernetes cluster with either [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing, or with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Deploy to Bluemix
-If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix,  click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and fill in all the environment variables on **Delivery Pipeline**. For Further instructions, please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions_new.md).
+If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix, click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and fill in all the environment variables on **Delivery Pipeline**. For Further instructions, please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions_new.md).
 
 > You will need to create your Kubernetes cluster first and make sure it is fully deployed in your Bluemix account.
 
@@ -68,7 +68,7 @@ Download the code needed to build and deploy OpenWhisk on Kubernetes
 
 ```
 git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
-cd openwhisk-devtools/kubernetes
+cd incubator-openwhisk-deploy-kube
 ```
 
 # 2. Create OpenWhisk namespace
