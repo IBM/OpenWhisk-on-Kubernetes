@@ -1,5 +1,4 @@
-
-[![Build Status](https://travis-ci.org/IBM/kubernetes-container-service-cassandra-deployment.svg?branch=master)](https://travis-ci.org/IBM/openwhisk-on-k8)
+[![Build Status](https://travis-ci.org/IBM/OpenWhisk-on-Kubernetes.svg?branch=master)](https://travis-ci.org/IBM/OpenWhisk-on-Kubernetes)
 
 # OpenWhisk on Kubernetes leveraging Bluemix Container Service
 
