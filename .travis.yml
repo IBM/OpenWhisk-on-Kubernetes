@@ -1,10 +1,9 @@
-language: bash
 services:
 - docker
-script: true
-sudo: required
 before_install:
 - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && bash scripts/install.sh || bash scripts/install_pr.sh'
+script: true
+sudo: required
 env:
   matrix:
     - env:
