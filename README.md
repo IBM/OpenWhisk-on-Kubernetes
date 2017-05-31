@@ -112,7 +112,6 @@ kubectl -n openwhisk logs configure-openwhisk-XXXXX
 As part of the deployment process, we store the OpenWhisk Authorization tokens in Kubernetes secrets. To use the secrets you will need to base64 decode them. So, run the following commands to retrieve your secret and decode it with base64.
 
 ```
-kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml
 export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
 ```
 
@@ -125,7 +124,6 @@ kubectl get nodes
 Obtain the public port for the Kubernetes Nginx Service and note the port that used for the API endpoint.
 
 ```
-kubectl -n openwhisk describe service nginx
 export WSK_PORT=$(kubectl -n openwhisk describe service nginx | grep https-api | grep NodePort| awk '{print $3}' | cut -d'/' -f1)
 ```
 Now you should be able to setup the wsk cli like normal and interact with Openwhisk.
