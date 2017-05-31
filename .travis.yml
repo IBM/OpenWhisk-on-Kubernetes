@@ -6,13 +6,8 @@ sudo: required
 before_install:
 - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && bash travis/install.sh || bash travis/install_pr.sh'
 env:
-  matrix:
-    - env:
-      - TRAVIS_KUBE_VERSION=v1.5.6
-      - TRAVIS_ETCD_VERSION=v3.0.14
-    - env:
-      - TRAVIS_KUBE_VERSION=v1.6.2
-      - TRAVIS_ETCD_VERSION=v3.0.17
+  - TRAVIS_KUBE_VERSION=v1.5.6
+  - TRAVIS_ETCD_VERSION=v3.0.14
 group: stable
 dist: precise
 os: linux
