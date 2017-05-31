@@ -18,7 +18,7 @@ function install_bluemix_kubernetes_cli() {
   sudo mv ./kubectl /usr/local/bin/kubectl
 }
 
-function minikube(){
+function minikube() {
   #Will be added when Docker 1.24 and above is available on Minikube
 }
 

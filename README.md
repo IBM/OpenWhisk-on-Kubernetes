@@ -23,7 +23,7 @@ With IBM Bluemix Container Service, you can deploy and manage your own Kubernete
 
 ## Prerequisites
 
-Create a Kubernetes cluster with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy on the cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
+- Create a Kubernetes cluster with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy on the cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Deploy to Bluemix
 If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix, click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and fill in all the environment variables on **Delivery Pipeline**. For Further instructions, please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions_new.md).
@@ -35,23 +35,13 @@ If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix, click
 
 The OpenWhisk will not be exposed on the public IP of the Kubernetes cluster. You can still access them by exporting your Kubernetes cluster configuration using `bx cs cluster-config <your-cluster-name>` and doing [Step 5](#5-build-or-use-openwhisk-docker-images) or to simply check their status `kubectl exec <POD-NAME> -- nodetool status`
 
-## Prerquisites
-
-- Kubernetes needs to be version 1.5+
-- Kubernetes has Kube-DNS deployed
-- (Optional) Kubernetes Pods can receive public addresses. This will be required if you wish to reach Nginx from outside of the Kubernetes cluster's network.
-
-```Note: Use the following link to complete the instructions at the bottom
-https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
-```
-
 ## Steps
 
-1. [Download OpenWhisk-Kubernetes codebase](#1-download-openWhisk-kubernetes-codebase)
+1. [Download OpenWhisk-Kubernetes codebase](#1-download-openwhisk-kubernetes-codebase)
 
 ### Quick Start
 
-2. [Create OpenWhisk namespace](#2-create-openWhisk-namespace)
+2. [Create OpenWhisk namespace](#2-create-openwhisk-namespace)
 3. [Run Kubernetes Job to deploy OpenWhisk](#3-run-kubernetes-job-to-deploy-openwhisk)
 
 ### Manually deploying
@@ -59,7 +49,7 @@ https://github.com/openwhisk/openwhisk-devtools/tree/master/kubernetes
 5. [Build or use OpenWhisk Docker Images](#5-build-or-use-openwhisk-docker-images)
 6. [Deploy OpenWhisk on Kubernetes](#6-deploy-openwhisk-on-kubernetes)
 
-#### [Troubleshooting](#troubleshooting)
+[Troubleshooting](#troubleshooting)
 
 
 # 1. Download OpenWhisk Kubernetes codebase
@@ -82,7 +72,7 @@ kubectl apply -f configure/openwhisk_kube_namespace.yml
 
 >**Important**: Since the Kubernetes Job needs the cluster-admin role to create and deploy all the necessary components for OpenWhish, please run `kubectl get ClusterRole` and make sure you have **cluster-admin** role in order to proceed to the following steps. If you do not have a cluster-admin role, please switch to a cluster that has a cluster-admin role.
 
-First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/openwhisk-on-k8.git`).
+First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/OpenWhisk-on-Kubernetes.git.git`).
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1alpha1
@@ -149,11 +139,11 @@ wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --resu
 # 4. Create Kubernetes yaml files
 
 The current Kube Deployment and Services files that define the OpenWhisk
-cluster can be found [here](ansible-kube/environments/kube/files). Only one
+cluster can be found [here](https://github.com/apache/incubator-openwhisk-deploy-kube/tree/master/ansible-kube/environments/kube/files). Only one
 instance of each OpenWhisk process is created, but if you would like
 to increase that number, then this would be the place to do it. Simply edit
 the appropriate file and
-[Manually Build Custom Docker Files](#5-manually-building-custom-docker-files)
+[Manually Build Custom Docker Files](#5-build-or-use-openwhisk-docker-images)
 
 # 5. Build or use OpenWhisk Docker Images
 
@@ -173,15 +163,15 @@ The script takes 2 arguments:
    fail to properly upload the docker images.
 
 2. The second argument is the location of where the
-   [OpenWhisk](https://github.com/openwhisk/openwhisk) repo is installed
+   [OpenWhisk](https://github.com/apache/incubator-openwhisk) repo is installed
    locally. By default, it assumes that this repo exists at
    `$HOME/workspace/openwhisk`. If you don't have OpenWhisk installed locally,
-   you can run `git clone https://github.com/openwhisk/openwhisk.git` to clone the openwhisk directory.
+   you can run `git clone https://github.com/apache/incubator-openwhisk.git` to clone the openwhisk directory.
 
 If you plan on building your own images and would like to change from `danlavine's`,
 then make sure to update the
-[configure_whisk.yml](configure/configure_whisk.yml) and
-[nginx](ansible-kube/environments/kube/files/nginx.yml) with your images.
+[configure_whisk.yml](https://github.com/apache/incubator-openwhisk-deploy-kube/blob/master/configure/configure_whisk.yml) and
+[nginx](https://github.com/apache/incubator-openwhisk-deploy-kube/blob/master/ansible-kube/environments/kube/files/nginx.yml) with your images.
 
 To run the script, use the command:
 
@@ -197,7 +187,7 @@ Now, you can view your images locally or on DockerHub.
 When in the process of creating a new deployment, it is nice to
 run things by hand to see what is going on inside the container and
 not have it be removed as soon as it finishes or fails. For this,
-you can change the command of [configure_whisk.yml](configure/configure_whisk.yml)
+you can change the command of [configure_whisk.yml](https://github.com/apache/incubator-openwhisk-deploy-kube/blob/master/configure/configure_whisk.yml)
 to `command: [ "tail", "-f", "/dev/null" ]`. Then just run the
 original command from inside the Pod's container.
 
