@@ -1,7 +1,7 @@
 
 [![Build Status](https://travis-ci.org/IBM/kubernetes-container-service-cassandra-deployment.svg?branch=master)](https://travis-ci.org/IBM/openwhisk-on-k8)
 
-# OpenWhisk on Bluemix Container Service using Kubernetes
+# OpenWhisk on Kubernetes leveraging Bluemix Container Service
 
 This code demonstrates the deployment of OpenWhisk on Kubernetes cluster. Apache OpenWhisk is a serverless, open source cloud platform that executes functions in response to events at any scale. As a developer there's no need to manage the servers that run your code. Apache OpenWhisk operates and scales your application for you. 
 
