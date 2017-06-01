@@ -1,10 +1,17 @@
+---
 language: bash
-services:
-- docker
-script: true
+
 sudo: required
-before_install:
-- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && bash scripts/install.sh || bash scripts/install_pr.sh'
-group: stable
-dist: precise
-os: linux
+services:
+  - docker
+
+matrix:
+  fast-finish: true
+
+env:
+  - TEST_RUN="scripts/install.sh"
+  - TEST_RUN="scripts/install_pr.sh"
+
+install: true
+
+script: "$TEST_RUN"
