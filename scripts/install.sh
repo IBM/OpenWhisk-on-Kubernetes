@@ -20,6 +20,11 @@ function bluemix_auth() {
   echo "Installing kubectl"
   chmod +x ./kubectl
   sudo mv ./kubectl /usr/local/bin/kubectl
+
+  echo "Installing OpenWhisk"
+  curl -LO https://openwhisk.ng.bluemix.net/cli/go/download/linux/amd64/wsk
+  chmod +x ./wsk
+  sudo mv ./wsk /usr/local/bin/wsk
 }
 
 function cluster_setup() {
@@ -78,10 +83,11 @@ then
 fi
 kubectl get pods -n openwhisk
 
-echo "wsk property set --auth $AUTH_SECRET --apihost https://$IP_ADDR:$WSK_PORT"
 
-echo "Travis build successful."
-echo "Cleaning up cluster..."
+echo "Testing OpenWhisk"
+wsk property set --auth $AUTH_SECRET --apihost https://$IP:$WSK_PORT
+wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result 
+
 }
 
 
@@ -91,4 +97,3 @@ bluemix_auth
 cluster_setup
 initial_setup
 getting_ip_port
-cluster_setup
