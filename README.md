@@ -23,6 +23,8 @@ With IBM Bluemix Container Service, you can deploy and manage your own Kubernete
 
 ## Prerequisites
 
+- Install [OpenWhisk CLI](https://console.ng.bluemix.net/openwhisk/learn/cli)
+
 - Create a Kubernetes cluster with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy on the cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Deploy to Bluemix
@@ -129,7 +131,8 @@ export WSK_PORT=$(kubectl -n openwhisk describe service nginx | grep https-api |
 Now you should be able to setup the wsk cli like normal and interact with Openwhisk.
 
 ```
-wsk property set --auth $AUTH_SECRET --apihost https://[kube_node_ip]:$WSK_PORT
+export KUBE_IP=$(kubectl get nodes | grep Ready | awk '{ print $1;exit }')
+wsk property set --auth $AUTH_SECRET --apihost https://$KUBE_IP:$WSK_PORT
 wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result 
 ```
 > Note: Since your Kubernetes doesn't contain any IP SANs, you need to run your OpenWhisk actions with the insecure `-i` flag.
