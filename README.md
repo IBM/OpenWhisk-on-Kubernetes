@@ -6,6 +6,7 @@ This code demonstrates the deployment of OpenWhisk on Kubernetes cluster. Apache
 
 With IBM Bluemix Container Service, you can deploy and manage your own Kubernetes cluster in the cloud that lets you automate the deployment, operation, scaling, and monitoring of containerized apps over a cluster of independent compute hosts called worker nodes.  We can then leverage Bluemix Container Service using Kubernetes to deploy scalable OpenWhisk.
 
+In this code we deploy OpenWhisk control plane on Kubernetes cluster, while the action containers are spawned by talking to docker daemon on Kubernetes slave machine(s) directly. This is an extension of the core OpenWhisk on Kubernetes [deployment code](https://github.com/apache/incubator-openwhisk-deploy-kube)
 ![kube-openwhisk](images/kube-openwhisk-1.png)
 
 ## Included Components
@@ -25,7 +26,9 @@ With IBM Bluemix Container Service, you can deploy and manage your own Kubernete
 
 - Install [OpenWhisk CLI](https://console.ng.bluemix.net/openwhisk/learn/cli)
 
-- Create a Kubernetes cluster with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy on the cloud. The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
+- To deploy on opensource Kubernetes codebase using Kubeadm, please visit [here](https://github.com/apache/incubator-openwhisk-deploy-kube)
+
+- To follow the instructions here, create a Kubernetes cluster with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template). The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Deploy to Bluemix
 If you want to deploy OpenWhisk directly to Kubernetes cluster on Bluemix, click on 'Deploy to Bluemix' button below to create a Bluemix DevOps service toolchain and fill in all the environment variables on **Delivery Pipeline**. For Further instructions, please follow the [Toolchain instructions](https://github.com/IBM/container-journey-template/blob/master/Toolchain_Instructions_new.md).
