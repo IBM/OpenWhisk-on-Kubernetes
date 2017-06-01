@@ -7,7 +7,6 @@ This code demonstrates the deployment of OpenWhisk on Kubernetes cluster. Apache
 With IBM Bluemix Container Service, you can deploy and manage your own Kubernetes cluster in the cloud that lets you automate the deployment, operation, scaling, and monitoring of containerized apps over a cluster of independent compute hosts called worker nodes.  We can then leverage Bluemix Container Service using Kubernetes to deploy scalable OpenWhisk.
 
 In this code we deploy OpenWhisk control plane on Kubernetes cluster, while the action containers are spawned by talking to docker daemon on Kubernetes slave machine(s) directly. This is an extension of the core OpenWhisk on Kubernetes [deployment code](https://github.com/apache/incubator-openwhisk-deploy-kube)
-
 ![kube-openwhisk](images/kube-openwhisk-1.png)
 
 ## Included Components
