@@ -74,7 +74,7 @@ kubectl apply -f configure/openwhisk_kube_namespace.yml
 
 >**Important**: Since the Kubernetes Job needs the cluster-admin role to create and deploy all the necessary components for OpenWhish, please run `kubectl get ClusterRole` and make sure you have **cluster-admin** role in order to proceed to the following steps. If you do not have a cluster-admin role, please switch to a cluster that has a cluster-admin role.
 
-First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/OpenWhisk-on-Kubernetes.git.git`).
+First, we need to change a Cluster Role Binding to give permission for the job to run on Bluemix Kubernetes clusters. So, create a `permission.yaml` file with the following code (Or you can clone it from our repository `git clone https://github.com/IBM/OpenWhisk-on-Kubernetes.git`).
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1alpha1
