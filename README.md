@@ -115,6 +115,21 @@ To see what is happening during the deployment process, you should be able to se
 kubectl -n openwhisk get pods #This will retrieve which pod is running the configure-openwhisk
 kubectl -n openwhisk logs configure-openwhisk-XXXXX
 ```
+When the configure-openwhisk job is finished, you should see the following pods.
+
+```bash
+$ kubectl -n openwhisk get pods --show-all=true
+NAME                          READY     STATUS      RESTARTS   AGE
+configure-openwhisk-5c3vm     0/1       Completed   0          7d
+consul-57995027-17l71         2/2       Running     0          7d
+controller-4190656464-v86b7   1/1       Running     0          7d
+couchdb-109298327-4v0gz       1/1       Running     0          7d
+invoker-0                     1/1       Running     0          7d
+kafka-1060962555-hxqlj        1/1       Running     0          7d
+nginx-1175504326-v8qk4        1/1       Running     0          7d
+zookeeper-1304892743-q8drf    1/1       Running     0          7d
+```
+
 
 As part of the deployment process, we store the OpenWhisk Authorization tokens in Kubernetes secrets. To use the secrets you will need to base64 decode them. So, run the following commands to retrieve your secret and decode it with base64.
 
