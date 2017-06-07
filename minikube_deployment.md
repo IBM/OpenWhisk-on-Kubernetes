@@ -67,7 +67,7 @@ nginx-1175504326-v8qk4        1/1       Running     0          7d
 zookeeper-1304892743-q8drf    1/1       Running     0          7d
 ```
 
-Next, We need to enable Promiscuous mode for your docker0 network, so you can access OpenWhisk on your local machine.
+Next, We need to enable Promiscuous mode for your *docker0* network, so you can access OpenWhisk on your local machine.
 
 ```bash
 minikube ssh
@@ -83,7 +83,7 @@ export WSK_PORT=$(kubectl -n openwhisk describe service nginx | awk ' /https-api
 export KUBE_IP=$(minikube -n openwhisk service nginx --url | awk '{print substr($1,8,14);exit}')
 wsk property set --auth $AUTH_SECRET --apihost https://$KUBE_IP:$WSK_PORT
 ```
-Congratulation, your OpenWhisk is up and running on your Minikube. Here's a simple command that help your start testing your OpenWhisk.
+Congratulation, your OpenWhisk is up and running on your Minikube. Here's a simple command that helps your start testing your OpenWhisk.
 
 ```bash
 $ wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result 
