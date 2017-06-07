@@ -30,6 +30,8 @@ In this code we deploy OpenWhisk control plane on Kubernetes cluster, while the 
 
 - To deploy on opensource Kubernetes codebase using Kubeadm, please visit [here](https://github.com/apache/incubator-openwhisk-deploy-kube)
 
+- To deploy on Minikube, please visit [here](minikube_deployment.md)
+
 - To follow the instructions here, create a Kubernetes cluster with [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template). The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
 
 ## Deploy to Bluemix
@@ -134,7 +136,7 @@ zookeeper-1304892743-q8drf    1/1       Running     0          7d
 As part of the deployment process, we store the OpenWhisk Authorization tokens in Kubernetes secrets. To use the secrets you will need to base64 decode them. So, run the following commands to retrieve your secret and decode it with base64.
 
 ```
-export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | grep 'auth_whisk_system:' | awk '{print $2}' | base64 --decode)
+export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | awk ' /auth_whisk_system/ {print $2}' | base64 --decode)
 ```
 
 Obtain the IP address of the Kubernetes nodes. You will need this to setup your OpenWhisk API host.
@@ -146,12 +148,12 @@ kubectl get nodes
 Obtain the public port for the Kubernetes Nginx Service and note the port that used for the API endpoint.
 
 ```
-export WSK_PORT=$(kubectl -n openwhisk describe service nginx | grep https-api | grep NodePort| awk '{print $3}' | cut -d'/' -f1)
+export WSK_PORT=$(kubectl -n openwhisk describe service nginx | awk ' /https-api/ && /NodePort/ {print substr($3,0,5)}')
 ```
 Now you should be able to setup the wsk cli like normal and interact with Openwhisk.
 
 ```
-export KUBE_IP=$(kubectl get nodes | grep Ready | awk '{ print $1;exit }')
+export KUBE_IP=$(kubectl get nodes | awk ' /Ready/ { print $1;exit }')
 wsk property set --auth $AUTH_SECRET --apihost https://$KUBE_IP:$WSK_PORT
 wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result 
 ```
