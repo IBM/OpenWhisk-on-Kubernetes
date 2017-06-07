@@ -40,7 +40,7 @@ kubectl -n openwhisk get pods #Look for your configure-openwhisk's pod name
 kubectl -n openwhisk exec -ti configure-openwhisk-XXXXX /bin/bash #Replace configure-openwhisk-XXXXX to your configure-openwhisk's pod name
 ```
 
-Now, you are inside the configure-openwhisk pod, run the following command to edit the Docker API version for one of our components.
+Now, you are inside the configure-openwhisk pod. Run the following command to edit the Docker API version for one of our components.
 
 ```bash
 sed '/"15s"/a "         - name: "DOCKER_API_VERSION" \n            value: "1.23"' /incubator-openwhisk-deploy-kube/ansible-kube/environments/kube/files/invoker.yml
@@ -52,7 +52,7 @@ Then, in your configure-openwhisk pod, run the configure script to deploy OpenWh
 ./incubator-openwhisk-deploy-kube/configure/configure.sh
 ```
 
-After the configure.sh script is successfully executed, exit the pod by running `exit`. Now, you should back in your main terminal and you should see the following pods if your OpenWhisk is successfully deployed.
+After the configure.sh script is successfully executed, exit the pod by running `exit`. Now, you should see the following pods if your OpenWhisk is successfully deployed.
 
 ```bash
 $ kubectl -n openwhisk get pods --show-all=true
