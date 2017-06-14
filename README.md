@@ -64,7 +64,7 @@ The OpenWhisk will not be exposed on the public IP of the Kubernetes cluster. Yo
 # 1. Download OpenWhisk Kubernetes codebase
 Download the code needed to build and deploy OpenWhisk on Kubernetes
 
-```
+```shell
 git clone https://github.com/apache/incubator-openwhisk-deploy-kube.git
 cd incubator-openwhisk-deploy-kube
 ```
@@ -73,7 +73,7 @@ cd incubator-openwhisk-deploy-kube
 
 Once you are successfully targeted, you will need to create a create a namespace called openwhisk. To do this, you can just run the following command.
 
-```
+```shell
 kubectl apply -f configure/openwhisk_kube_namespace.yml
 ```
 
@@ -100,26 +100,26 @@ subjects:
 
 Then, run the ClusterRoleBinding on your Kubernetes.
 
-```
+```shell
 kubectl create -f permission.yaml
 ```
 
 Now, run the Kubernetes job to setup the OpenWhisk environment.
 
-```
+```shell
 kubectl apply -f configure/configure_whisk.yml
 ```
 The Kubernetes job under the covers pulls the latest Docker image needed as a base and runs the configuration script
 
 To see what is happening during the deployment process, you should be able to see the logs by running
 
-```
+```shell
 kubectl -n openwhisk get pods #This will retrieve which pod is running the configure-openwhisk
 kubectl -n openwhisk logs configure-openwhisk-XXXXX
 ```
 When the configure-openwhisk job is finished, you should see the following pods.
 
-```bash
+```shell
 $ kubectl -n openwhisk get pods --show-all=true
 NAME                          READY     STATUS      RESTARTS   AGE
 configure-openwhisk-5c3vm     0/1       Completed   0          7d
@@ -135,27 +135,26 @@ zookeeper-1304892743-q8drf    1/1       Running     0          7d
 
 As part of the deployment process, we store the OpenWhisk Authorization tokens in Kubernetes secrets. To use the secrets you will need to base64 decode them. So, run the following commands to retrieve your secret and decode it with base64.
 
-```
-export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | awk ' /auth_whisk_system/ {print $2}' | base64 --decode)
+```shell
+export AUTH_SECRET=$(kubectl -n openwhisk get secret openwhisk-auth-tokens -o yaml | awk ' /auth_whisk_system:/ {print $2}' | base64 --decode)
 ```
 
 Obtain the IP address of the Kubernetes nodes. You will need this to setup your OpenWhisk API host.
 
-```
-kubectl get nodes
+```shell
+export KUBE_IP=$(kubectl get nodes | awk ' /Ready/ { print $1;exit }')
 ```
 
 Obtain the public port for the Kubernetes Nginx Service and note the port that used for the API endpoint.
 
-```
+```shell
 export WSK_PORT=$(kubectl -n openwhisk describe service nginx | awk ' /https-api/ && /NodePort/ {print substr($3,0,5)}')
 ```
 Now you should be able to setup the wsk cli like normal and interact with Openwhisk.
 
-```
-export KUBE_IP=$(kubectl get nodes | awk ' /Ready/ { print $1;exit }')
+```shell
 wsk property set --auth $AUTH_SECRET --apihost https://$KUBE_IP:$WSK_PORT
-wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result 
+wsk -i action invoke /whisk.system/utils/echo -p message hello --blocking --result
 ```
 > Note: Since your Kubernetes doesn't contain any IP SANs, you need to run your OpenWhisk actions with the insecure `-i` flag.
 
@@ -198,7 +197,7 @@ then make sure to update the
 
 To run the script, use the command:
 
-```
+```shell
 ./docker/build.sh <docker username> <full path of openwhisk dir>
 ```
 
@@ -216,7 +215,7 @@ original command from inside the Pod's container.
 
 To create and get inside the pod, run
 
-```bash
+```shell
 kubectl apply -f configure/openwhisk_kube_namespace.yml
 kubectl apply -f configure/configure_whisk.yml
 kubectl -n openwhisk get pods #This will retrieve which pod is running the configure-openwhisk
@@ -231,7 +230,7 @@ As part of the development process, you might need to clean up the Kubernetes
 environment at some point. For this, we want to delete all the Kube deployments,
 services and jobs. For this, you can run the following commands:
 
-```
+```shell
 kubectl delete pods,deployments,configmaps,statefulsets,services,jobs --all --namespace=openwhisk
 kubectl delete namespace openwhisk
 ```
@@ -257,7 +256,7 @@ If your job doesn't have permission to create new deployments/services, we need 
 
   Then, run the ClusterRoleBinding on your Kubernetes.
 
-  ```
+  ```shell
   kubectl create -f permission.yaml
   ```
 
