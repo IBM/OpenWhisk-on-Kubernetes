@@ -6,7 +6,7 @@ This guide is intended for maintainers — anybody with commit access to one or 
 
 A master branch. This branch MUST be releasable at all times. Commits and merges against this branch MUST contain only bugfixes and/or security fixes. Maintenance releases are tagged against master.
 
-A develop branch. This branch contains your proposed changes,
+A develop branch. This branch contains your proposed changes.
 
 The remainder of this document details how to merge pull requests to the repositories.
 
